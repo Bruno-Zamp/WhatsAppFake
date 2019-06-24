@@ -1,51 +1,41 @@
 import React, { Component } from "react";
-import { Actions } from "react-native-router-flux";
-import { Text, View, StyleSheet, Image, Button } from "react-native";
-import { connect } from "react-redux";
+import { View, StyleSheet } from "react-native";
+import { TabViewAnimated, SceneMap, TabBar } from "react-native-tab-view";
 
 const logo = require("../../img/logo.png");
+
+const Conversas = () => (
+  <View style={[styles.container, { backgroundColor: "#ff4081" }]} />
+);
+const Contatos = () => (
+  <View style={[styles.container, { backgroundColor: "#673ab7" }]} />
+);
+
 export default class TelaMensagens extends Component {
+  state = {
+    index: 0,
+    routes: [{ key: "1", title: "Conversas" }, { key: "2", title: "Contatos" }]
+  };
+  _handleChangeTab = index => this.setState({ index });
+  _renderHeader = props => <TabBar {...props} />;
+  _renderScene = SceneMap({
+    "1": Conversas,
+    "2": Contatos
+  });
   render() {
     return (
-      <View style={styles.total}>
-        <View style={styles.topo}>
-          <Image source={logo} style={styles.logowpp} />
-          <Text style={styles.textoRealizouLogin}>Você realizou o login!</Text>
-        </View>
-        <Button
-          color="#115E54"
-          onPress={() => {
-            Actions.TelaPrincipal();
-          }}
-          title="Sair"
-        />
-      </View>
+      <TabViewAnimated
+        style={styles.container}
+        navigationState={this.state}
+        renderScene={this._renderScene}
+        renderHeader={this._renderHeader}
+        onRequestChangeTab={this._handleChangeTab}
+      />
     );
   }
 }
 const styles = StyleSheet.create({
-  total: {
-    flex: 1,
-    padding: 13,
-    justifyContent: "center"
-  },
-  topo: {
-    alignItems: "center"
-  },
-  logowpp: {
-    height: 50,
-    width: 50,
-    marginRight: 10
-  },
-  textoRealizouLogin: {
-    marginBottom: 50,
-    fontSize: 20,
-    color: "#115E54",
-    marginTop: 5
-  },
-  textCadastroComSucesso: {
-    fontSize: 30,
-    color: "green",
-    marginBottom: 50
+  container: {
+    flex: 1
   }
 });

@@ -8,7 +8,8 @@ import {
   Button,
   StyleSheet,
   TouchableHighlight,
-  Image
+  Image,
+  ActivityIndicator
 } from "react-native";
 import {
   modificaEmail,
@@ -20,13 +21,27 @@ const logo = require("../../img/logo.png");
 const mapStateToProps = state => ({
   email: state.AutenticacaoReducer.email,
   senha: state.AutenticacaoReducer.senha,
-  erroLogin: state.AutenticacaoReducer.erroLogin
+  erroLogin: state.AutenticacaoReducer.erroLogin,
+  loading: state.AutenticacaoReducer.loading
 });
 
 class formLogin extends Component {
   _logarUsuario() {
     const { email, senha } = this.props;
     this.props.logarUsuario({ email, senha });
+  }
+  renderBtnAcessar() {
+    if (this.props.loading) {
+      return <ActivityIndicator size="large" />;
+    }
+    return (
+      <Button
+        style={styles.botao}
+        onPress={() => this._logarUsuario()}
+        title="Acessar"
+        color="#115E54"
+      />
+    );
   }
   render() {
     return (
@@ -56,14 +71,7 @@ class formLogin extends Component {
           </TouchableHighlight>
           <Text style={styles.msgErroLogin}>{this.props.erroLogin}</Text>
         </View>
-        <View style={styles.divBaixo}>
-          <Button
-            style={styles.botao}
-            onPress={() => this._logarUsuario()}
-            title="Acessar"
-            color="#115E54"
-          />
-        </View>
+        <View style={styles.divBaixo}>{this.renderBtnAcessar()}</View>
       </View>
     );
   }

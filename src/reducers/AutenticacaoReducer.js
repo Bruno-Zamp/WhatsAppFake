@@ -4,32 +4,30 @@ const INITIAL_STATE = {
   senha: "",
   telefone: "",
   erroCadastro: "",
-  erroLogin: ""
+  erroLogin: "",
+  loading: false
 };
 export default (state = INITIAL_STATE, action) => {
-  if (action.type == "modifica_email") {
-    return { ...state, email: action.payload };
+  switch (action.type) {
+    case "modifica_email":
+      return { ...state, email: action.payload };
+    case "modifica_senha":
+      return { ...state, senha: action.payload };
+    case "modifica_telefone":
+      return { ...state, telefone: action.payload };
+    case "modifica_nome":
+      return { ...state, nome: action.payload };
+    case "cadastro_usuario_erro":
+      return { ...state, loading: false, erroCadastro: action.payload };
+    case "cadastro_usuario_sucesso":
+      return { ...state, ...INITIAL_STATE };
+    case "login_usuario_erro":
+      return { ...state, loading: false, erroLogin: action.payload };
+    case "login_usuario_sucesso":
+      return { ...state, ...INITIAL_STATE };
+    case "login_em_andamento":
+      return { ...state, loading: true };
+    default:
+      return state;
   }
-  if (action.type == "modifica_senha") {
-    return { ...state, senha: action.payload };
-  }
-  if (action.type == "modifica_telefone") {
-    return { ...state, telefone: action.payload };
-  }
-  if (action.type == "modifica_nome") {
-    return { ...state, nome: action.payload };
-  }
-  if (action.type == "cadastro_usuario_erro") {
-    return { ...state, erroCadastro: action.payload };
-  }
-  if (action.type == "cadastro_usuario_sucesso") {
-    return { ...state, ...INITIAL_STATE };
-  }
-  if (action.type == "login_usuario_erro") {
-    return { ...state, erroLogin: action.payload };
-  }
-  if (action.type == "login_usuario_sucesso") {
-    return { ...state, ...INITIAL_STATE };
-  }
-  return state;
 };

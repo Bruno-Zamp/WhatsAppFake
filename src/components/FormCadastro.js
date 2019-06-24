@@ -1,5 +1,13 @@
 import React, { Component } from "react";
-import { Text, View, TextInput, Button, StyleSheet, Image } from "react-native";
+import {
+  Text,
+  View,
+  TextInput,
+  Button,
+  StyleSheet,
+  Image,
+  ActivityIndicator
+} from "react-native";
 import { connect } from "react-redux";
 import {
   modificaEmail,
@@ -15,7 +23,8 @@ const mapStateToProps = state => ({
   email: state.AutenticacaoReducer.email,
   senha: state.AutenticacaoReducer.senha,
   telefone: state.AutenticacaoReducer.telefone,
-  erroCadastro: state.AutenticacaoReducer.erroCadastro
+  erroCadastro: state.AutenticacaoReducer.erroCadastro,
+  loading: state.AutenticacaoReducer.loading
 });
 
 class formCadastro extends Component {
@@ -23,7 +32,19 @@ class formCadastro extends Component {
     const { nome, email, senha } = this.props;
     this.props.cadastrarUsuario({ nome, email, senha });
   }
-
+  renderBtnCadastrar() {
+    if (this.props.loading) {
+      return <ActivityIndicator size="large" />;
+    }
+    return (
+      <Button
+        style={styles.botao}
+        onPress={() => this._cadastraUsuario()}
+        title="Cadastrar"
+        color="#115E54"
+      />
+    );
+  }
   render() {
     return (
       <View style={styles.total}>
@@ -65,14 +86,7 @@ class formCadastro extends Component {
             {this.props.erroCadastro}
           </Text>
         </View>
-        <View style={styles.divBaixo}>
-          <Button
-            style={styles.botao}
-            onPress={() => this._cadastraUsuario()}
-            title="Cadastrar"
-            color="#115E54"
-          />
-        </View>
+        <View style={styles.divBaixo}>{this.renderBtnCadastrar()}</View>
       </View>
     );
   }
